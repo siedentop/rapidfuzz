@@ -64,7 +64,8 @@ bool check(const std::string &description,
     std::cerr << std::endl << "- " << description << std::endl;
   }
 
-  RandomData data(Data, Data + Size);
+  size_t size64 = Size / 8;
+  RandomData data(Data, Data + size64);
 
   TestMetadata metadata;
   metadata.id = description;

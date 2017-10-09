@@ -2,12 +2,10 @@
 #include <string>
 
 #include <rapidcheck.h>
-// #include <rapidcheck/detail/Property.hpp>
-#include <rapidcheck/detail/ApplyTuple.h>
 
 bool callable(int x) {
   std::cout << x << std::endl;
-  return true;
+  return x == 0;
 }
 
 template <typename Testable>
@@ -30,13 +28,10 @@ int main() {
   convert(callable);
 
   uint8_t Data[32] = "randomIsCoolLeet";
-  // uint8_t Data[16] = "randomIs";
 
   rc::check("string call", [](const std::string &s) { return true; }, Data, 32);
 
-  // if (!rc::check("call-me", callable)) {
-  //   return 1;
-  // }
+  rc::check("call-me", callable, Data, 32);
 
   std::cout << "Hello, World!" << std::endl;
 

@@ -10,9 +10,9 @@ namespace detail {
 struct TestParams {
   /// The seed to use.
   // TODO(siedentop): can i remove this now?
-  uint64_t seed = 0;
+  // uint64_t seed = 0;
   /// The maximum number of successes before deciding a property passes.
-  int maxSuccess = 100;
+  int maxSuccess = 1;
   /// The maximum size to generate.
   int maxSize = 100;
   /// The maximum allowed number of discarded tests per successful test.

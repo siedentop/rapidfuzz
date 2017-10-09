@@ -1,9 +1,9 @@
 #include "rapidcheck/detail/Configuration.h"
 
-#include <random>
 #include <cstdlib>
-#include <sstream>
 #include <iostream>
+#include <random>
+#include <sstream>
 
 #include "MapParser.h"
 #include "ParseException.h"
@@ -94,12 +94,6 @@ Configuration configFromMap(const std::map<std::string, std::string> &map,
   Configuration config(defaults);
 
   loadParam(map,
-            "seed",
-            config.testParams.seed,
-            "'seed' must be a valid integer",
-            anything<uint64_t>);
-
-  loadParam(map,
             "max_success",
             config.testParams.maxSuccess,
             "'max_success' must be a valid non-negative integer",
@@ -146,7 +140,6 @@ Configuration configFromMap(const std::map<std::string, std::string> &map,
 
 std::map<std::string, std::string> mapFromConfig(const Configuration &config) {
   return {
-      {"seed", std::to_string(config.testParams.seed)},
       {"max_success", std::to_string(config.testParams.maxSuccess)},
       {"max_size", std::to_string(config.testParams.maxSize)},
       {"max_discard_ratio", std::to_string(config.testParams.maxDiscardRatio)},
@@ -189,7 +182,7 @@ std::string configToString(const Configuration &config) {
 std::string configToMinimalString(const Configuration &config) {
   auto defaults = mapFromConfig(Configuration());
   // Remove keys that we always want to specify
-  defaults.erase("seed");
+  // defaults.erase("seed");
   return mapToString(mapDifference(mapFromConfig(config), defaults));
 }
 
@@ -198,8 +191,9 @@ namespace {
 Configuration loadConfiguration() {
   Configuration config;
   // Default to random seed
-  std::random_device device;
-  config.testParams.seed = (static_cast<uint64_t>(device()) << 32) | device();
+  // std::random_device device;
+  // config.testParams.seed = (static_cast<uint64_t>(device()) << 32) |
+  // device();
 
   const auto params = getEnvValue("RC_PARAMS");
   if (params) {
