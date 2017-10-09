@@ -33,14 +33,13 @@ Random::Random()
 // Random::Random(uint64_t seed)
 //    : Random(Key{{seed, seed, seed, seed}}) {}
 
-Random::Random(uint8_t *Data, size_t Size)
+Random::Random(const RandomData &data)
     : m_key(Key{0, 0, 0, 0})
     , m_block()
     , m_bits(0)
     , m_counter(0)
     , m_bitsi(0)
-    , m_data(Data)
-    , m_data_size(Size)
+    , m_data(data)
     , m_index(1) // A binary tree as list, so index starts at 1
     , m_empty(false) {}
 

@@ -14,10 +14,11 @@ checkProperty(const Property &property,
               TestListener &listener,
               const std::unordered_map<std::string, Reproduce> &reproduceMap) {
   if (reproduceMap.empty()) {
-    std::cout << "reproduceMap.empty() branch called." << std::endl;
-    return testProperty(property, metadata, params, listener);
+    return testProperty(property, metadata, data, params, listener);
   }
 
+  // TODO: I do not understand the next block. When is 'reproduceProperty' being
+  // called?
   const auto it = reproduceMap.find(metadata.id);
   if (metadata.id.empty() || (it == end(reproduceMap))) {
     SuccessResult success;

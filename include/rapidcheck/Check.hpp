@@ -8,8 +8,6 @@
 #include "rapidcheck/detail/TestListener.h"
 
 namespace rc {
-using RandomData = std::vector<uint8_t>;
-
 namespace detail {
 
 TestResult

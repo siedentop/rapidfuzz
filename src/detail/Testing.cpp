@@ -29,6 +29,7 @@ int sizeFor(const TestParams &params, int i) {
 } // namespace
 
 SearchResult searchProperty(const Property &property,
+                            const RandomData &data,
                             const TestParams &params,
                             TestListener &listener) {
   SearchResult searchResult;
@@ -40,7 +41,7 @@ SearchResult searchProperty(const Property &property,
   const auto maxDiscard = params.maxDiscardRatio * params.maxSuccess;
 
   auto recentDiscards = 0;
-  auto r = Random(params.data.ptr, params.data.size);
+  auto r = Random(data);
   while (searchResult.numSuccess < params.maxSuccess) {
     const auto size =
         sizeFor(params, searchResult.numSuccess) + (recentDiscards / 10);
@@ -110,9 +111,10 @@ shrinkTestCase(const Shrinkable<CaseDescription> &shrinkable,
 namespace {
 
 TestResult doTestProperty(const Property &property,
+                          const RandomData &data,
                           const TestParams &params,
                           TestListener &listener) {
-  const auto searchResult = searchProperty(property, params, listener);
+  const auto searchResult = searchProperty(property, data, params, listener);
   if (searchResult.type == SearchResult::Type::Success) {
     SuccessResult success;
     success.numSuccess = searchResult.numSuccess;
@@ -154,9 +156,10 @@ TestResult doTestProperty(const Property &property,
 
 TestResult testProperty(const Property &property,
                         const TestMetadata &metadata,
+                        const RandomData &data,
                         const TestParams &params,
                         TestListener &listener) {
-  TestResult result = doTestProperty(property, params, listener);
+  TestResult result = doTestProperty(property, data, params, listener);
   listener.onTestFinished(metadata, result);
   return result;
 }
