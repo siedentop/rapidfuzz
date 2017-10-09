@@ -23,6 +23,9 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wno-missing-braces -std=c++11")
 endif()
 
+add_executable(main main.cc)
+target_link_libraries(main rapidcheck)
+
 add_library(rapidcheck
   src/BeforeMinimalTestCase.cpp
   src/Check.cpp

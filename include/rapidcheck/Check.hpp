@@ -3,31 +3,37 @@
 #include <iostream>
 
 #include "rapidcheck/detail/Configuration.h"
-#include "rapidcheck/detail/Results.h"
 #include "rapidcheck/detail/Property.h"
+#include "rapidcheck/detail/Results.h"
 #include "rapidcheck/detail/TestListener.h"
 
 namespace rc {
+using RandomData = std::vector<uint8_t>;
+
 namespace detail {
 
 TestResult
 checkProperty(const Property &property,
               const TestMetadata &metadata,
+              const RandomData &data,
               const TestParams &params,
               TestListener &listener,
               const std::unordered_map<std::string, Reproduce> &reproduceMap);
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
+                         const RandomData &data,
                          const TestParams &params,
                          TestListener &listener);
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
+                         const RandomData &data,
                          const TestParams &params);
 
 TestResult checkProperty(const Property &property,
-                         const TestMetadata &metadata);
+                         const TestMetadata &metadata,
+                         const RandomData &data);
 
 // Uses defaults from configuration
 TestResult checkProperty(const Property &property);
@@ -46,7 +52,10 @@ bool check(Testable &&testable) {
 }
 
 template <typename Testable>
-bool check(const std::string &description, Testable &&testable) {
+bool check(const std::string &description,
+           Testable &&testable,
+           uint8_t *Data,
+           size_t Size) {
   using namespace rc::detail;
 
   // Force loading of the configuration so that message comes _before_ the
@@ -57,11 +66,13 @@ bool check(const std::string &description, Testable &&testable) {
     std::cerr << std::endl << "- " << description << std::endl;
   }
 
+  RandomData data(Data, Data + Size);
+
   TestMetadata metadata;
   metadata.id = description;
   metadata.description = description;
   const auto result =
-      detail::checkTestable(std::forward<Testable>(testable), metadata);
+      detail::checkTestable(std::forward<Testable>(testable), metadata, data);
 
   printResultMessage(result, std::cerr);
   std::cerr << std::endl;

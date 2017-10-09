@@ -9,10 +9,12 @@ namespace detail {
 TestResult
 checkProperty(const Property &property,
               const TestMetadata &metadata,
+              const RandomData &data,
               const TestParams &params,
               TestListener &listener,
               const std::unordered_map<std::string, Reproduce> &reproduceMap) {
   if (reproduceMap.empty()) {
+    std::cout << "reproduceMap.empty() branch called." << std::endl;
     return testProperty(property, metadata, params, listener);
   }
 
@@ -26,31 +28,35 @@ checkProperty(const Property &property,
     if (params.disableShrinking) {
       reproduce.shrinkPath.clear();
     }
+    std::cout << "reproduceProperty about to be called" << std::endl;
     return reproduceProperty(property, reproduce);
   }
 }
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
+                         const RandomData &data,
                          const TestParams &params,
                          TestListener &listener) {
   return checkProperty(
-      property, metadata, params, listener, configuration().reproduce);
+      property, metadata, data, params, listener, configuration().reproduce);
 }
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
+                         const RandomData &data,
                          const TestParams &params) {
-  return checkProperty(property, metadata, params, globalTestListener());
+  return checkProperty(property, metadata, data, params, globalTestListener());
 }
 
 TestResult checkProperty(const Property &property,
-                         const TestMetadata &metadata) {
-  return checkProperty(property, metadata, configuration().testParams);
+                         const TestMetadata &metadata,
+                         const RandomData &data) {
+  return checkProperty(property, metadata, data, configuration().testParams);
 }
 
-TestResult checkProperty(const Property &property) {
-  return checkProperty(property, TestMetadata());
+TestResult checkProperty(const Property &property, const RandomData &data) {
+  return checkProperty(property, TestMetadata(), data);
 }
 
 } // namespace detail

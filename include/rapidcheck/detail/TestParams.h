@@ -1,10 +1,17 @@
 #pragma once
 
-#include <iosfwd>
 #include <cstdint>
+#include <iosfwd>
 
 namespace rc {
 namespace detail {
+
+struct Data {
+  /// Pointer to array
+  uint8_t *ptr;
+  /// Size of array
+  size_t size;
+};
 
 /// Describes the parameters for a test.
 struct TestParams {
@@ -18,6 +25,9 @@ struct TestParams {
   int maxDiscardRatio = 10;
   /// Whether shrinking should be disabled or not.
   bool disableShrinking = false;
+
+  /// Pre-filled data
+  Data data;
 };
 
 bool operator==(const TestParams &p1, const TestParams &p2);

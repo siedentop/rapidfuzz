@@ -40,7 +40,7 @@ SearchResult searchProperty(const Property &property,
   const auto maxDiscard = params.maxDiscardRatio * params.maxSuccess;
 
   auto recentDiscards = 0;
-  auto r = Random(params.seed);
+  auto r = Random(params.data.ptr, params.data.size);
   while (searchResult.numSuccess < params.maxSuccess) {
     const auto size =
         sizeFor(params, searchResult.numSuccess) + (recentDiscards / 10);

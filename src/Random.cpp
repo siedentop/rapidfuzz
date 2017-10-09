@@ -1,8 +1,8 @@
 #include "rapidcheck/Random.h"
 
-#include <iostream>
 #include <cassert>
 #include <functional>
+#include <iostream>
 
 #include "rapidcheck/Show.h"
 
@@ -14,23 +14,33 @@ namespace {
 
 constexpr uint64_t kKeyScheduleParity = 0x1BD11BDAA9FC1A22ULL;
 constexpr uint64_t kTweak[2] = {13, 37};
-}
+} // namespace
+
+// Random::Random()
+//     : Random(Key{{0, 0, 0, 0}}) {}
 
 Random::Random()
-    : Random(Key{{0, 0, 0, 0}}) {}
+    : m_empty(true) {}
 
-Random::Random(const Key &key)
-    : m_key(key)
-    , m_block()
-    , m_bits(0)
-    , m_counter(0)
-    , m_bitsi(0) {}
+// Random::Random(const Key &key)
+//     : m_key(key)
+//     , m_block()
+//     , m_bits(0)
+//     , m_counter(0)
+//     , m_bitsi(0) {}
 
 // We just repeat the seed in the key
-Random::Random(uint64_t seed)
-    : Random(Key{{seed, seed, seed, seed}}) {}
+// Random::Random(uint64_t seed)
+//    : Random(Key{{seed, seed, seed, seed}}) {}
+
+Random::Random(uint8_t *Data, size_t Size)
+    : m_data(Data)
+    , m_data_size(Size)
+    , m_index(1) // A binary tree as list, so index starts at 1
+    , m_empty(false) {}
 
 Random Random::split() {
+  std::cout << "split called" << std::endl;
   assert(m_counter == 0);
   Random right(*this);
   append(false);
@@ -39,6 +49,12 @@ Random Random::split() {
 }
 
 Random::Number Random::next() {
+  assert(!m_empty);
+  if (m_empty) {
+    throw std::logic_error("Random is empty!");
+  }
+  std::cout << "next called" << std::endl;
+
   std::size_t blki = m_counter % std::tuple_size<Block>::value;
   if (blki == 0) {
     mash(m_block);
