@@ -2,7 +2,6 @@
 
 #include <cassert>
 #include <functional>
-#include <iostream>
 
 #include "rapidcheck/Show.h"
 
@@ -32,10 +31,8 @@ Random::Random(const RandomData::Ptr &data)
     : m_data(data) {}
 
 Random Random::split() {
-  std::cout << "split called @ " << std::endl;
-
-  Random right(m_data);
-  return right;
+  /// Split is not needed anymore, it is simply a copy of the underlying shared-ptr to the data-stack.
+  return Random(m_data);
 }
 
 Random::Number Random::next() {
@@ -45,7 +42,6 @@ Random::Number Random::next() {
 
   const auto value = m_data->top_and_pop();
 
-  std::cout << "Random::next(): " << value << ", " << std::endl;
   return value;
 }
 

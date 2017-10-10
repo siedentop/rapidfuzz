@@ -36,7 +36,12 @@ target_link_libraries(fuzz_danluu_example
     PUBLIC rapidcheck
 )
 
-
+add_executable(fuzz_encoding fuzz_encoding.cc)
+target_compile_options(fuzz_encoding PRIVATE -fsanitize=fuzzer,address)
+target_link_libraries(fuzz_encoding
+    PRIVATE -fsanitize=fuzzer,address
+    PUBLIC rapidcheck
+)
 
 add_library(rapidcheck
   src/BeforeMinimalTestCase.cpp

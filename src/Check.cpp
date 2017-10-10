@@ -29,7 +29,7 @@ checkProperty(const Property &property,
     if (params.disableShrinking) {
       reproduce.shrinkPath.clear();
     }
-    std::cout << "reproduceProperty about to be called" << std::endl;
+    throw std::logic_error("reproduceProperty about to be called but I have not implemented it.");
     return reproduceProperty(property, reproduce);
   }
 }
