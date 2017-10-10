@@ -27,20 +27,17 @@ int dut(const std::vector<int> &a) {
     return 1;
   }
 
-  if (some_filter(a[0]))
-    if (some_filter(a[1]))
-      if (some_filter(a[2]))
-        if (some_filter(a[3])) {
-          return 0;
-        }
+  if (some_filter(a[0]) && some_filter(a[1]) && some_filter(a[2]) &&
+      some_filter(a[3])) {
+    return 0;
+  }
   return 5;
 }
 
 int fud(int x) { return x == 0; }
 
-
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-  if (!rc::check("Fuzz-fud", fud, Data, Size)) {
+  if (!rc::check("Fuzz-fud", dut, Data, Size)) {
     assert(false);
   }
 
