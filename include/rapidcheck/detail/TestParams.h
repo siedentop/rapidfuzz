@@ -12,7 +12,7 @@ struct TestParams {
   // TODO(siedentop): can i remove this now?
   // uint64_t seed = 0;
   /// The maximum number of successes before deciding a property passes.
-  int maxSuccess = 1;
+  int maxSuccess = 2;
   /// The maximum size to generate.
   int maxSize = 100;
   /// The maximum allowed number of discarded tests per successful test.
