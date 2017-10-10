@@ -40,7 +40,9 @@ int fud(int x) { return x > 0; }
 
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-  rc::check("Fuzz-fud", fud, Data, Size);
+  if (!rc::check("Fuzz-fud", fud, Data, Size)) {
+    assert(false);
+  }
 
   return 0;
 }
