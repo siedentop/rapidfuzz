@@ -69,13 +69,18 @@ bool check(const std::string &description,
   TestMetadata metadata;
   metadata.id = description;
   metadata.description = description;
-  const auto result =
-      detail::checkTestable(std::forward<Testable>(testable), metadata, data);
 
-  printResultMessage(result, std::cerr);
-  std::cerr << std::endl;
+  try {
+    const auto result =
+        detail::checkTestable(std::forward<Testable>(testable), metadata, data);
 
-  return result.template is<detail::SuccessResult>();
+    printResultMessage(result, std::cerr);
+    std::cerr << std::endl;
+
+    return result.template is<detail::SuccessResult>();
+  } catch (rc::RandomEmptyException &e) {
+    return true;
+  }
 }
 
 } // namespace rc

@@ -36,7 +36,7 @@ int dut(const std::vector<int> &a) {
   return 5;
 }
 
-int fud(int x) { return x > 0; }
+int fud(int x) { return x == 0; }
 
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
