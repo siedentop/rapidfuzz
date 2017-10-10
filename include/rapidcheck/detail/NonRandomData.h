@@ -10,7 +10,7 @@ class RandomData {
 public:
   using Ptr = std::shared_ptr<RandomData>;
 
-  RandomData(uint8_t *Data, size_t Size);
+  RandomData(const uint8_t *Data, size_t Size);
 
   inline bool empty() const { return m_data.empty(); }
 

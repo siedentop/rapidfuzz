@@ -52,7 +52,7 @@ bool check(Testable &&testable) {
 template <typename Testable>
 bool check(const std::string &description,
            Testable &&testable,
-           uint8_t *Data,
+           const uint8_t *Data,
            size_t Size) {
   using namespace rc::detail;
 

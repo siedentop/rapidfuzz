@@ -26,6 +26,17 @@ endif()
 add_executable(main main.cc)
 target_link_libraries(main rapidcheck)
 
+
+# Note: Only works with recent (6.0) Clang
+add_executable(fuzz_danluu_example danluu_example.cc)
+target_compile_options(fuzz_danluu_example PRIVATE -fsanitize=address,fuzzer)
+target_link_libraries(fuzz_danluu_example
+    PRIVATE -fsanitize=fuzzer,address
+    PUBLIC rapidcheck
+)
+
+
+
 add_library(rapidcheck
   src/BeforeMinimalTestCase.cpp
   src/Check.cpp
