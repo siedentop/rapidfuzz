@@ -44,6 +44,7 @@ add_library(rapidcheck
   src/detail/LogTestListener.cpp
   src/detail/MapParser.cpp
   src/detail/MulticastTestListener.cpp
+  src/detail/NonRandomData.cpp
   src/detail/ParseException.cpp
   src/detail/Platform.cpp
   src/detail/Property.cpp

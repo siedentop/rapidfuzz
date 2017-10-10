@@ -9,7 +9,7 @@ namespace detail {
 TestResult
 checkProperty(const Property &property,
               const TestMetadata &metadata,
-              const RandomData &data,
+              const RandomData::Ptr &data,
               const TestParams &params,
               TestListener &listener,
               const std::unordered_map<std::string, Reproduce> &reproduceMap) {
@@ -36,7 +36,7 @@ checkProperty(const Property &property,
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData &data,
+                         const RandomData::Ptr &data,
                          const TestParams &params,
                          TestListener &listener) {
   return checkProperty(
@@ -45,18 +45,19 @@ TestResult checkProperty(const Property &property,
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData &data,
+                         const RandomData::Ptr &data,
                          const TestParams &params) {
   return checkProperty(property, metadata, data, params, globalTestListener());
 }
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData &data) {
+                         const RandomData::Ptr &data) {
   return checkProperty(property, metadata, data, configuration().testParams);
 }
 
-TestResult checkProperty(const Property &property, const RandomData &data) {
+TestResult checkProperty(const Property &property,
+                         const RandomData::Ptr &data) {
   return checkProperty(property, TestMetadata(), data);
 }
 

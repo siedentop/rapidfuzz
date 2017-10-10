@@ -13,25 +13,25 @@ namespace detail {
 TestResult
 checkProperty(const Property &property,
               const TestMetadata &metadata,
-              const RandomData &data,
+              const RandomData::Ptr &data,
               const TestParams &params,
               TestListener &listener,
               const std::unordered_map<std::string, Reproduce> &reproduceMap);
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData &data,
+                         const RandomData::Ptr &data,
                          const TestParams &params,
                          TestListener &listener);
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData &data,
+                         const RandomData::Ptr &data,
                          const TestParams &params);
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData &data);
+                         const RandomData::Ptr &data);
 
 // Uses defaults from configuration
 TestResult checkProperty(const Property &property);
@@ -64,8 +64,7 @@ bool check(const std::string &description,
     std::cerr << std::endl << "- " << description << std::endl;
   }
 
-  size_t size64 = Size / 8;
-  RandomData data(Data, Data + size64);
+  auto data = std::make_shared<RandomData>(Data, Size);
 
   TestMetadata metadata;
   metadata.id = description;

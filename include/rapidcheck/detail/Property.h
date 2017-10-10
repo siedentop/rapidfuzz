@@ -1,14 +1,12 @@
 #pragma once
 
 #include <functional>
-#include <vector>
 
 #include "rapidcheck/Gen.h"
 #include "rapidcheck/detail/Results.h"
 
 namespace rc {
 namespace detail {
-using RandomData = std::vector<uint8_t>;
 
 struct CaseDescription {
   CaseResult result;

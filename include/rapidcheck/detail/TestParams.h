@@ -18,7 +18,7 @@ struct TestParams {
   /// The maximum allowed number of discarded tests per successful test.
   int maxDiscardRatio = 10;
   /// Whether shrinking should be disabled or not.
-  bool disableShrinking = false;
+  bool disableShrinking = true;
 };
 
 bool operator==(const TestParams &p1, const TestParams &p2);

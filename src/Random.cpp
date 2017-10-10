@@ -15,9 +15,7 @@ namespace rc {
 //     : Random(Key{{0, 0, 0, 0}}) {}
 
 Random::Random()
-    : m_data({})
-    , m_index(42) // This way, it is emtpy...
-{}
+    : m_data(nullptr) {}
 
 // Random::Random(const Key &key)
 //     : m_key(key)
@@ -30,26 +28,24 @@ Random::Random()
 // Random::Random(uint64_t seed)
 //    : Random(Key{{seed, seed, seed, seed}}) {}
 
-Random::Random(const RandomData &data, size_t index)
-    : m_data(data)
-    , m_index(index) {}
+Random::Random(const RandomData::Ptr &data)
+    : m_data(data) {}
 
 Random Random::split() {
-  std::cout << "split called @ " << m_index << std::endl;
-  Random right(m_data, 2 * m_index + 1);
+  std::cout << "split called @ " << std::endl;
+
+  Random right(m_data);
   return right;
 }
 
 Random::Number Random::next() {
-  if (empty()) {
-    throw RandomEmptyException(m_data.size(), m_index);
+  if (m_data->empty()) {
+    throw RandomEmptyException();
   }
 
-  std::cout << "next called @ " << m_index << std::endl;
+  const auto value = m_data->top_and_pop();
 
-  const auto value = m_data[m_index];
-
-  m_index = 2 * m_index;
+  std::cout << "Random::next(): " << value << ", " << std::endl;
   return value;
 }
 
