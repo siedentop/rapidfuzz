@@ -28,20 +28,22 @@ target_compile_options(main PRIVATE -fsanitize=address)
 target_link_libraries(main rapidcheck -fsanitize=address)
 
 
-# Note: Only works with recent (6.0) Clang
-add_executable(fuzz_danluu_example danluu_example.cc)
-target_compile_options(fuzz_danluu_example PRIVATE -fsanitize=fuzzer,address)
-target_link_libraries(fuzz_danluu_example
-    PRIVATE -fsanitize=fuzzer,address
-    PUBLIC rapidcheck
+if(FALSE)
+    # Note: Only works with recent (6.0) Clang
+    add_executable(fuzz_danluu_example danluu_example.cc)
+    target_compile_options(fuzz_danluu_example PRIVATE -fsanitize=fuzzer,address)
+    target_link_libraries(fuzz_danluu_example
+        PRIVATE -fsanitize=fuzzer,address
+        PUBLIC rapidcheck
+    )
+    
+    add_executable(fuzz_encoding fuzz_encoding.cc)
+    target_compile_options(fuzz_encoding PRIVATE -fsanitize=fuzzer,address)
+    target_link_libraries(fuzz_encoding
+        PRIVATE -fsanitize=fuzzer,address
+        PUBLIC rapidcheck
 )
-
-add_executable(fuzz_encoding fuzz_encoding.cc)
-target_compile_options(fuzz_encoding PRIVATE -fsanitize=fuzzer,address)
-target_link_libraries(fuzz_encoding
-    PRIVATE -fsanitize=fuzzer,address
-    PUBLIC rapidcheck
-)
+endif()
 
 add_library(rapidcheck
   src/BeforeMinimalTestCase.cpp

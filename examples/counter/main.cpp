@@ -30,29 +30,37 @@ struct Inc : public state::Command<CounterModel, Counter> {
 
   void run(const CounterModel &s0, Counter &counter) const override {
     counter.inc();
-    RC_ASSERT(counter.get() == (s0.value + 1));
+    assert(counter.get() == (s0.value + 1));
   }
 };
 
 struct Dec : public state::Command<CounterModel, Counter> {
   void checkPreconditions(const CounterModel &s0) const override {
     RC_PRE(s0.value > 0);
+    assert(s0.value > 0);
   }
 
   void apply(CounterModel &s0) const override { s0.value--; }
 
   void run(const CounterModel &state, Counter &counter) const override {
     counter.dec();
-    RC_ASSERT(counter.get() == (state.value - 1));
+      if (counter.get() != (state.value - 1)) {
+          std::cout << "Failing: " << counter.get() << ", " << state.value -1 << std::endl; }
+    assert(counter.get() == (state.value - 1));
   }
 };
 
-int main() {
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+//int main() {
+//    const uint8_t* Data = nullptr;
+//    size_t Size = 0;
+
+    
   check([] {
     CounterModel state;
     Counter sut;
     state::check(state, sut, state::gen::execOneOfWithArgs<Inc, Dec>());
-  });
+  }, Data, Size);
 
   return 0;
 }

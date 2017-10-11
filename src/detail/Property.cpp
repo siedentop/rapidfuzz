@@ -136,10 +136,10 @@ describeIngredient(const gen::detail::Recipe::Ingredient &ingredient) {
     return tryDescribeIngredientValue(ingredient);
   } catch (const GenerationFailure &e) {
     return {"Generation failed", e.what()};
-  } catch (const std::exception &e) {
-    return {"Exception while generating", e.what()};
-  } catch (...) {
-    return {"Unknown exception", "<\?\?\?>"};
+    // } catch (const std::exception &e) {
+    //   return {"Exception while generating", e.what()};
+    // } catch (...) {
+    //   return {"Unknown exception", "<\?\?\?>"};
   }
 }
 

@@ -40,6 +40,7 @@ Random Random::split() {
 Random::Number Random::next() {
     assert(m_data);
   if (m_data->empty()) {
+    assert(false);
     throw RandomEmptyException();
   }
 

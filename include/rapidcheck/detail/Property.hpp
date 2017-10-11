@@ -75,15 +75,15 @@ public:
       context.reportResult(CaseResult(
           CaseResult::Type::Discard,
           std::string("Generation failed with message:\n") + e.what()));
-    } catch (const std::exception &e) {
-      context.reportResult(CaseResult(
-          CaseResult::Type::Failure,
-          std::string("Exception thrown with message:\n") + e.what()));
-    } catch (const std::string &str) {
-      context.reportResult(CaseResult(CaseResult::Type::Failure, str));
-    } catch (...) {
-      context.reportResult(
-          CaseResult(CaseResult::Type::Failure, "Unknown object thrown"));
+      // } catch (const std::exception &e) {
+      //   context.reportResult(CaseResult(
+      //       CaseResult::Type::Failure,
+      //       std::string("Exception thrown with message:\n") + e.what()));
+      // } catch (const std::string &str) {
+      //   context.reportResult(CaseResult(CaseResult::Type::Failure, str));
+      // } catch (...) {
+      //   context.reportResult(
+      //       CaseResult(CaseResult::Type::Failure, "Unknown object thrown"));
     }
 
     return context.result();

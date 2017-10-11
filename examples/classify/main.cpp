@@ -28,10 +28,10 @@ struct Arbitrary<User> {
 } // namespace rc
 
 int main() {
-  rc::check("RC_TAG", [](const User &user) { RC_TAG(user.gender); });
+  rc::check("RC_TAG", [](const User &user) { RC_TAG(user.gender); }, nullptr, 0);
 
   rc::check("RC_CLASSIFY",
-            [](const User &user) { RC_CLASSIFY(user.username.empty()); });
+            [](const User &user) { RC_CLASSIFY(user.username.empty()); }, nullptr, 0);
 
   return 0;
 }

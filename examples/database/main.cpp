@@ -123,6 +123,6 @@ int main() {
                                                BeginWrite,
                                                ExecuteWrite,
                                                Get>());
-  });
+  }, nullptr, 0);
   return 0;
 }

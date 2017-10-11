@@ -16,6 +16,7 @@ public:
 
   /// Use top value from stack (so it's gone afterwards).
   inline uint64_t top_and_pop() {
+      assert(!empty());
     const auto value = m_data.top();
     m_data.pop();
     return value;
