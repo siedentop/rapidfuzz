@@ -6,11 +6,11 @@
 namespace rc {
 
 /// Wrapper around a std::stack. + nice c-tor.
-class RandomData {
+class FuzzData {
 public:
-  using Ptr = std::shared_ptr<RandomData>;
+  using Ptr = std::shared_ptr<FuzzData>;
 
-  RandomData(const uint8_t *Data, size_t Size);
+  FuzzData(const uint8_t *Data, size_t Size);
 
   inline bool empty() const { return m_data.empty(); }
 

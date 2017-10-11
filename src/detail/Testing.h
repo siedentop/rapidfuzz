@@ -56,7 +56,7 @@ struct SearchResult {
 ///
 /// @return A `SearchResult` structure describing the result of the search.
 SearchResult searchProperty(const Property &property,
-                            const RandomData::Ptr &data,
+                            const FuzzData::Ptr &data,
                             const TestParams &params,
                             TestListener &listener);
 
@@ -78,7 +78,7 @@ shrinkTestCase(const Shrinkable<CaseDescription> &shrinkable,
 /// @param listener  A test listener to report progress to.
 TestResult testProperty(const Property &property,
                         const TestMetadata &metadata,
-                        const RandomData::Ptr &data,
+                        const FuzzData::Ptr &data,
                         const TestParams &params,
                         TestListener &listener);
 

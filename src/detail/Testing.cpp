@@ -29,7 +29,7 @@ int sizeFor(const TestParams &params, int i) {
 } // namespace
 
 SearchResult searchProperty(const Property &property,
-                            const RandomData::Ptr &data,
+                            const FuzzData::Ptr &data,
                             const TestParams &params,
                             TestListener &listener) {
   SearchResult searchResult;
@@ -111,7 +111,7 @@ shrinkTestCase(const Shrinkable<CaseDescription> &shrinkable,
 namespace {
 
 TestResult doTestProperty(const Property &property,
-                          const RandomData::Ptr &data,
+                          const FuzzData::Ptr &data,
                           const TestParams &params,
                           TestListener &listener) {
   const auto searchResult = searchProperty(property, data, params, listener);
@@ -156,7 +156,7 @@ TestResult doTestProperty(const Property &property,
 
 TestResult testProperty(const Property &property,
                         const TestMetadata &metadata,
-                        const RandomData::Ptr &data,
+                        const FuzzData::Ptr &data,
                         const TestParams &params,
                         TestListener &listener) {
   TestResult result = doTestProperty(property, data, params, listener);

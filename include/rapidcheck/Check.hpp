@@ -13,25 +13,25 @@ namespace detail {
 TestResult
 checkProperty(const Property &property,
               const TestMetadata &metadata,
-              const RandomData::Ptr &data,
+              const FuzzData::Ptr &data,
               const TestParams &params,
               TestListener &listener,
               const std::unordered_map<std::string, Reproduce> &reproduceMap);
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData::Ptr &data,
+                         const FuzzData::Ptr &data,
                          const TestParams &params,
                          TestListener &listener);
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData::Ptr &data,
+                         const FuzzData::Ptr &data,
                          const TestParams &params);
 
 TestResult checkProperty(const Property &property,
                          const TestMetadata &metadata,
-                         const RandomData::Ptr &data);
+                         const FuzzData::Ptr &data);
 
 // Uses defaults from configuration
 TestResult checkProperty(const Property &property);
@@ -64,7 +64,7 @@ bool check(const std::string &description,
     std::cerr << std::endl << "- " << description << std::endl;
   }
 
-  auto data = std::make_shared<RandomData>(Data, Size);
+  auto data = std::make_shared<FuzzData>(Data, Size);
 
   TestMetadata metadata;
   metadata.id = description;

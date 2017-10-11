@@ -27,7 +27,7 @@ Random::Random()
 // Random::Random(uint64_t seed)
 //    : Random(Key{{seed, seed, seed, seed}}) {}
 
-Random::Random(const RandomData::Ptr &data)
+Random::Random(const FuzzData::Ptr &data)
     : m_data(data) {}
 
 Random Random::split() {

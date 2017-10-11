@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "rapidcheck/detail/NonRandomData.h"
+#include "rapidcheck/detail/FuzzData.h"
 
 namespace rc {
-RandomData::RandomData(const uint8_t *Data, size_t Size) {
+FuzzData::FuzzData(const uint8_t *Data, size_t Size) {
   // TODO: really stupid way to fill the container
   const size_t size64 = Size / 8;
   auto Data64 = reinterpret_cast<const uint64_t *>(Data);
