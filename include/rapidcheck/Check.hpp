@@ -45,8 +45,8 @@ TestResult checkTestable(Testable &&testable, Args &&... args) {
 } // namespace detail
 
 template <typename Testable>
-bool check(Testable &&testable) {
-  return check(std::string(), std::forward<Testable>(testable));
+bool check(Testable &&testable, const uint8_t *Data, size_t Size) {
+  return check(std::string(), std::forward<Testable>(testable), Data, Size);
 }
 
 template <typename Testable>
