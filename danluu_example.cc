@@ -21,6 +21,14 @@ bool some_filter(int x) {
   return true;
 }
 
+template <typename T>
+std::ostream &print(std::ostream &os, const T &t) {
+  for (const auto &x : t) {
+    std::cout << ", " << x;
+  }
+  return os;
+}
+
 /// Takes an array and returns a non-zero int
 int dut(const std::vector<int> &a) {
   if (a.size() != 4) {
@@ -29,17 +37,19 @@ int dut(const std::vector<int> &a) {
 
   if (some_filter(a[0]) && some_filter(a[1]) && some_filter(a[2]) &&
       some_filter(a[3])) {
-    return 0;
+    return 0; // Intentional bug: documentation promises non-zero.
   }
+
   return 5;
 }
 
 int fud(int x) { return x == 0; }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-  if (!rc::check("Fuzz-fud", dut, Data, Size)) {
-    assert(false);
-  }
+  rc::check("Fuzz-fud",
+            [](const std::vector<int> &x) { assert(dut(x) != 0); },
+            Data,
+            Size);
 
   return 0;
 }

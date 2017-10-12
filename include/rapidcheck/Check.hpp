@@ -60,9 +60,9 @@ bool check(const std::string &description,
   // description
   configuration();
 
-  if (!description.empty()) {
-    std::cerr << std::endl << "- " << description << std::endl;
-  }
+  // if (!description.empty()) {
+  //   std::cerr << std::endl << "- " << description << std::endl;
+  // }
 
   auto data = std::make_shared<FuzzData>(Data, Size);
 
@@ -74,8 +74,8 @@ bool check(const std::string &description,
     const auto result =
         detail::checkTestable(std::forward<Testable>(testable), metadata, data);
 
-    printResultMessage(result, std::cerr);
-    std::cerr << std::endl;
+    // printResultMessage(result, std::cerr);
+    // std::cerr << std::endl;
 
     return result.template is<detail::SuccessResult>();
   } catch (rc::RandomEmptyException &e) {

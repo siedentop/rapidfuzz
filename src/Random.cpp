@@ -33,14 +33,13 @@ Random::Random(const FuzzData::Ptr &data)
 Random Random::split() {
   /// Split is not needed anymore, it is simply a copy of the underlying
   /// shared-ptr to the data-stack.
-    assert(m_data);
+  assert(m_data);
   return Random(m_data);
 }
 
 Random::Number Random::next() {
-    assert(m_data);
+  assert(m_data);
   if (m_data->empty()) {
-    assert(false);
     throw RandomEmptyException();
   }
 
