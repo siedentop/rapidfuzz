@@ -23,13 +23,15 @@ with a wide variety of arguments. RapidCheck's magic figures out how to generate
 a `std::string`, `int`, or `std::vector<float>` (and many more).
 
 In Dan Luu's post, he urges that property-based testing (like RapidCheck) be
-combined with targeted fuzzers (like LLVM's libFuzzer and Michal Zalewski's AFL). This makes sense. Currently, Fuzzying is used primarily for finding
+combined with targeted fuzzers (like LLVM's libFuzzer and Michal Zalewski's AFL).
+This makes sense. Currently, Fuzzying is used primarily for finding
 crashes that can be induced in programs. However, most developers also care
 about correct functionality.
 
 He gives one specific example where fuzzers shine: Detecting that a very
 specific input causes the wrong result. Coverage-guided fuzzying helps here,
-because it tries to reach all corners of the code. QuickCheck and RapidCheck are lacking this guided approach. Instead they reason about the inputs.
+because it tries to reach all corners of the code. QuickCheck and RapidCheck are
+lacking this guided approach. Instead they reason about the inputs.
 
 Here's the example
 ```
