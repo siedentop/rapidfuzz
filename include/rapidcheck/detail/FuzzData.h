@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <stack>
+#include <cassert>
 
 namespace rc {
 
