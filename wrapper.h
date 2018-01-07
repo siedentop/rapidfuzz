@@ -89,16 +89,21 @@ std::vector<int> RawQueue::pop<std::vector<int>>() {
     std::lock_guard<std::mutex> lock(data_mutex_);
 
     check_size(1);
-    constexpr int size_method = 0;
+    const size_t capacity = (size_ - index_) / sizeof(int);
+    /** Both methods work (on first glance) equally well.
+     * For the second method, where the first byte determines the rest of the length,
+     * it is important to make vec_length = min(vec_length, remaining_capacity). Otherwise
+     * it does not find valid inputs.
+     */
+    constexpr int size_method = 1;
     if constexpr (size_method == 0) {
-      const size_t capacity = (size_ - index_) / sizeof(int);
       const float requested = (float)static_cast<size_t>(data_[index_]) / 256;
       vec_length = capacity * requested;
     } else {
-      vec_length = static_cast<size_t>(data_[index_]);
+      vec_length = std::min(static_cast<size_t>(data_[index_]), capacity);
     }
-    index_++;
     check_size(vec_length);
+    index_++;
   } // end lock_guard
 
   std::vector<int> val;
