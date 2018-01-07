@@ -2,8 +2,8 @@
 #include <numeric>
 #include <string>
 
-#include <rapidcheck.h>
-
+// #include <rapidcheck.h>
+#include "wrapper.h"
 #include "encode.h"
 
 template <typename T>
@@ -33,11 +33,22 @@ T sum_bad(const std::vector<T> &v) {
 }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-  rc::check("decode_inverts_encode",
-            [](const std::string &s0) { assert(s0 == decode(encode(s0))); },
-            Data,
-            Size);
+  // rc::check("decode_inverts_encode",
+  //           [](const std::string &s0) { assert(s0 == decode(encode(s0))); },
+  //           Data,
+  //           Size);
 
+  rapidfuzz::RawQueue raw(Data, Size);
+  try {
+  rapidfuzz::call(&raw, [](std::string s0) {
+		 //assert(s0 == decode(encode(s0)));
+		  if (s0 != decode(encode(s0))) {
+		    std::cout << "FoUND the bug with: " << s0 << std::endl;
+		    assert(false);
+		  }
+		  });
+  } catch (std::runtime_error) {
+  }	  
   /// This shows that the output on failure that rapidcheck produces is
   /// completely incorrect on failure. Most certainly related to my changes.
   // rc::check(

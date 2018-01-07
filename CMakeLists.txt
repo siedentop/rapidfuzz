@@ -38,11 +38,10 @@ if(TRUE)
     )
 
     add_executable(fuzz_encoding fuzz_encoding.cc)
-    target_compile_options(fuzz_encoding PRIVATE -fsanitize=fuzzer,address)
+    target_compile_options(fuzz_encoding PRIVATE -fsanitize=fuzzer,address -std=c++17)
     target_link_libraries(fuzz_encoding
         PRIVATE -fsanitize=fuzzer,address
-        PUBLIC rapidcheck
-)
+    )
 endif()
 
 add_library(rapidcheck

@@ -37,8 +37,11 @@ int dut(const std::vector<int> &a) {
     return 1;
   }
 
-  if (some_filter(a[0]) && some_filter(a[1]) && some_filter(a[2]) &&
-      some_filter(a[3])) {
+  if (some_filter(a[0])
+     // && some_filter(a[1])
+		 //  && some_filter(a[2])
+                 // && some_filter(a[3])
+      ) {
     return 0; // Intentional bug: documentation promises non-zero.
   }
 

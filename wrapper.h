@@ -1,10 +1,11 @@
-#pragma once   // TODO: use header guards.
+#pragma once // TODO: use header guards.
 #include <cassert>
 #include <functional>
 #include <iostream>
 #include <mutex>
 #include <string>
 #include <type_traits>
+#include <vector>
 
 #include "external/callable/callable.hpp"
 
@@ -13,33 +14,31 @@ namespace rapidfuzz {
 class RawQueue {
 public:
   RawQueue(const uint8_t *Data, size_t Size)
-      : data_(Data), size_(Size / sizeof(uint8_t)), index_(0){};
+      : data_(Data)
+      , size_(Size / sizeof(uint8_t))
+      , index_(0){};
 
   /** Takes one element of type T from queue.
-  *
-  * Throws if empty.
-  *
-  * NOTE: Little endianess means that uint8_t {1, 0, 0, 0} == int {1}.
-  */
-  template <typename T> T pop() {
+   *
+   * Throws if empty.
+   *
+   * NOTE: Little endianess means that uint8_t {1, 0, 0, 0} == int {1}.
+   */
+  template <typename T>
+  T pop() {
     assert(data_);
     std::lock_guard<std::mutex> lock(data_mutex_);
 
     static_assert(sizeof(uint8_t), "Index is wrong");
 
     constexpr size_t sizeof_T = sizeof(T) / sizeof(uint8_t);
-    if (!has_size(sizeof_T)) {
-      // TODO: Thou shall not use plain runtime_error!
-      throw  std::runtime_error("Queue depleted!");
-    }
-    assert(index_ < size_);
-
+    check_size(sizeof_T);
 
     // std::cout << "S: " << size_ << ", I: " << index_ << std::endl;
-    
-    //T val;
-    //std::memcpy(reinterpret_cast<T*>(&val), &(data_[index_]), sizeof(T));
-     // std::memcpy(                       &val , &(data_[index_]), sizeof(T));
+
+    // T val;
+    // std::memcpy(reinterpret_cast<T*>(&val), &(data_[index_]), sizeof(T));
+    // std::memcpy(                       &val , &(data_[index_]), sizeof(T));
 
     const T val = *reinterpret_cast<const T *>(&(data_[index_]));
     index_ += sizeof_T;
@@ -48,51 +47,54 @@ public:
   }
 
 protected:
-  bool has_size(size_t requested) {
-  return index_ + requested < size_; // TODO: I think off by one.
+  bool has_size(size_t requested) const { return index_ + requested <= size_; }
+
+  void check_size(size_t requested) const { // TODO: C++ to say this will throw?
+    if (!has_size(requested)) {
+      throw std::runtime_error("Queue depleted"); // TODO: Custom exception!
+    }
   }
 
 private:
-
   const uint8_t *data_; ///< Warning: Ownership resides outside of RawQueue.
   std::mutex data_mutex_;
   const size_t size_;
   size_t index_;
 };
 
-template <> std::string RawQueue::pop<std::string>() {
-  std::lock_guard<std::mutex> lock(data_mutex_);
+template <>
+std::string RawQueue::pop<std::string>() {
   assert(data_);
-  assert(index_ < size_);
-  size_t string_length = static_cast<size_t>(data_[index_]); // Up-to 255 ought to be enough.
-  const size_t new_index =
-      index_ + string_length + 1; // +1 b/c first value is length of string.
+  // check_size(1);
+  // size_t string_length = static_cast<size_t>(data_[index_]); // Up-to 255
+  // ought to be enough.
 
-  if (new_index > size_) {
-    // TODO: Thou shall not use plain runtime_error!
-    std::runtime_error("Queue depleted!");
-  }
+  size_t string_length = pop<size_t>();
 
-  const std::string val(reinterpret_cast<const char *>(&(data_[index_ + 1])),
+  check_size(string_length);
+  std::lock_guard<std::mutex> lock(data_mutex_);
+  const std::string val(reinterpret_cast<const char *>(&(data_[index_])),
                         string_length);
-  index_ = new_index;
+  index_ += string_length;
   return val;
 };
 
-
 // TODO: read on foldables as done by RapidCheck.
-template <> std::vector<int> RawQueue::pop<std::vector<int>>() {
-	size_t vec_length;
-	{ std::lock_guard<std::mutex> lock(data_mutex_);
-   if (!has_size(1)) throw std::runtime_error("Queue depleted"); 
-   vec_length = static_cast<size_t>(data_[index_]);
-  
-  // Optional, I'd say.
-  const size_t new_index = index_ + vec_length + 1;
-  // TODO: same as std::string implementation
-  if (new_index > size_) throw std::runtime_error("Queue depleted!");
-}  // end lock_guard
+template <>
+std::vector<int> RawQueue::pop<std::vector<int>>() {
+  size_t vec_length;
+  {
+    std::lock_guard<std::mutex> lock(data_mutex_);
 
+    check_size(1);
+    vec_length = static_cast<size_t>(data_[index_]);
+
+    // Optional, I'd say.
+    const size_t new_index = index_ + vec_length + 1;
+    // TODO: same as std::string implementation
+    if (new_index > size_)
+      throw std::runtime_error("Queue depleted!");
+  } // end lock_guard
 
   std::vector<int> val;
   val.reserve(vec_length);
@@ -120,4 +122,3 @@ decltype(auto) call(RawQueue *Data, F &&f, Args &&... args) {
 }
 
 } // namespace rapidfuzz
-
