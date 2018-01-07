@@ -138,3 +138,35 @@ RapidCheck was developed by Emil Eriksson at Spotify.
 
 Again, thanks to RapidCheck. It is amazingly useful and very easy to use. It also
 showed me new things in C++ and reminded me how much I still do not know.
+
+
+## Questions
+> Hey, that is really cool. Magic, even? Where does it break down? Meaning -- can I compose even awesomer types in my API and still have it figure out how to transform the input? Or does it strictly focus on containers and primitives?
+
+> For everyone else: skip to the example [1] to see the magic. "dut()" and indirectly "some_filter()" is the code under test. libFuzzer synthesizes Data+Size using your seed + its mutators + coverage-guided cleverness. But some of the tedium is transforming this into something your API expects. It's easy when you have something that expects a file as input.
+> Also, another semi-related approach to get fuzzing past the high level parse/lex frontend was to define a subset of your input grammar and use a serializer (e.g. protobuf) to make the small mutations (bitflips) more meaningful. clang-protobuf-fuzzer [2] .
+[1] https://github.com/unapiedra/rapidfuzz/blob/master/danluu_ex...
+[2] https://2017llvmdevmtg.sched.com/event/CMjT/structure-aware-...
+
+> From wyldfire on [HackerNews][3].
+[3]: https://news.ycombinator.com/item?id=15570489
+
+The magic here comes all from `RapidCheck`. You can compose your own types easily.
+There's some examples in the documentation. You can but are not required to provide
+guidance on how to transform the input.
+
+"Where does it break down?" It breaks down because of the way RapidCheck manipulates
+the argument (and the way I've hacked this to the Fuzzer).
+
+If you have non-POD classes, then a StateMachine-based search might be helpful.
+Instructions for this is also given in the original RapidCheck documentation.
+
+Furthermore, I can recommend the YouTube-Videos on [QuickCheck][4] (and [this][5]) by John Hughes,
+the inventor of QuickCheck. It explains
+how this works for State Machines around Minute 5:34.
+[4]: https://www.youtube.com/watch?v=zi0rHwfiX1Q?t=5m34s
+[5]: https://www.youtube.com/watch?v=gPFSZ8oKjco
+
+
+Hypothesis for Python: https://www.youtube.com/watch?v=mg5BeeYGjY0
+This explains also some internals.
