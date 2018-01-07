@@ -50,6 +50,13 @@ int dut(const std::vector<int> &a) {
 
 int fud(int x) { return x == 0; }
 
+void easy_test(int x) {
+  if (x == -42) {
+	  std::cout << "Found bug: " << x << std::endl;
+	  assert(false);
+  }
+}
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
 ///  rc::check("Fuzz-fud",
 ///            [](const std::vector<int> &x) { assert(dut(x) != 0); },
@@ -59,8 +66,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
 
   rapidfuzz::RawQueue raw(Data, Size);
   try {
-   rapidfuzz::call(&raw, [](std::vector<int> x) { assert(dut(x) != 0); });
-    // rapidfuzz::call(&raw, [](int x) { return x > 0; });
+   // rapidfuzz::call(&raw, [](std::vector<int> x) { assert(dut(x) != 0); });
+    rapidfuzz::call(&raw, easy_test);
     
   } catch (std::runtime_error) {
   }
