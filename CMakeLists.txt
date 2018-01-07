@@ -32,9 +32,9 @@ if(TRUE)
     # Note: Only works with recent (6.0) Clang
     add_executable(fuzz_danluu_example danluu_example.cc)
     target_compile_options(fuzz_danluu_example PRIVATE -fsanitize=fuzzer,address)
+    target_compile_options(fuzz_danluu_example PRIVATE -std=c++17)
     target_link_libraries(fuzz_danluu_example
         PRIVATE -fsanitize=fuzzer,address
-        PUBLIC rapidcheck
     )
 
     add_executable(fuzz_encoding fuzz_encoding.cc)
