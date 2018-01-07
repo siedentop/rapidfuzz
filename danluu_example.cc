@@ -57,6 +57,13 @@ void easy_test(int x) {
   }
 }
 
+void easy_test2(int x, int y) {
+   if (x == -42 && y == 9392939) {
+	   std::cout << "Found bug: " << x << ", " << y << std::endl;
+   assert(false);
+   }
+}
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
 ///  rc::check("Fuzz-fud",
 ///            [](const std::vector<int> &x) { assert(dut(x) != 0); },
@@ -67,7 +74,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   rapidfuzz::RawQueue raw(Data, Size);
   try {
    // rapidfuzz::call(&raw, [](std::vector<int> x) { assert(dut(x) != 0); });
-    rapidfuzz::call(&raw, easy_test);
+    rapidfuzz::call(&raw, easy_test2);
     
   } catch (std::runtime_error) {
   }
