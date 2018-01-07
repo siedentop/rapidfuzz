@@ -80,6 +80,7 @@ std::string RawQueue::pop<std::string>() {
 };
 
 // TODO: read on foldables as done by RapidCheck.
+// TODO: same as std::string implementation
 template <>
 std::vector<int> RawQueue::pop<std::vector<int>>() {
   size_t vec_length;
@@ -87,13 +88,16 @@ std::vector<int> RawQueue::pop<std::vector<int>>() {
     std::lock_guard<std::mutex> lock(data_mutex_);
 
     check_size(1);
-    vec_length = static_cast<size_t>(data_[index_]);
-
-    // Optional, I'd say.
-    const size_t new_index = index_ + vec_length + 1;
-    // TODO: same as std::string implementation
-    if (new_index > size_)
-      throw std::runtime_error("Queue depleted!");
+    constexpr int size_method = 0;
+    if constexpr (size_method == 0) {
+      const size_t capacity = (size_ - index_) / sizeof(int);
+      const float requested = static_cast<size_t>(data_[index_]) / 256;
+      vec_length = capacity * requested;
+    } else {
+      vec_length = static_cast<size_t>(data_[index_]);
+    }
+    index_++;
+    check_size(vec_length);
   } // end lock_guard
 
   std::vector<int> val;
