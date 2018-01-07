@@ -6,6 +6,7 @@
 #include <string>
 #include <type_traits>
 #include <vector>
+#include <utility>
 
 #include "external/callable/callable.hpp"
 
@@ -112,7 +113,7 @@ std::vector<int> RawQueue::pop<std::vector<int>>() {
 template <typename F, typename... Args>
 decltype(auto) call(RawQueue *Data, F &&f, Args &&... args) {
   if constexpr (std::is_invocable<F, Args...>::value) {
-    return std::invoke(f, args...);
+    return std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
   } else {
     assert(Data);
     constexpr size_t n_already = sizeof...(args);
@@ -121,7 +122,7 @@ decltype(auto) call(RawQueue *Data, F &&f, Args &&... args) {
     constexpr size_t pos = n_already;
     typedef typename callable_traits<F>::template argument_type<pos> T;
     auto val = Data->pop<T>();
-    return call(Data, f, args..., val);
+    return call(Data, std::forward<F>(f), std::forward<Args>(args)..., val);
   }
 }
 
