@@ -5,3 +5,5 @@ GTAGS
 TAGS
 ext/gmock
 ext/boost
+.cache/
+.env/
