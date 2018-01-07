@@ -33,7 +33,7 @@ std::ostream &print(std::ostream &os, const T &t) {
 
 /// Takes an array and returns a non-zero int
 int dut(const std::vector<int> &a) {
-  if (a.size() != 4) {
+  if (a.size() < 1) {
     return 1;
   }
 

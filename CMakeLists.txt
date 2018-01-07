@@ -31,10 +31,10 @@ target_link_libraries(main rapidcheck -fsanitize=address)
 if(TRUE)
     # Note: Only works with recent (6.0) Clang
     add_executable(fuzz_danluu_example danluu_example.cc)
-    target_compile_options(fuzz_danluu_example PRIVATE -fsanitize=fuzzer,address)
+    target_compile_options(fuzz_danluu_example PRIVATE -fsanitize=fuzzer)
     target_compile_options(fuzz_danluu_example PRIVATE -std=c++17)
     target_link_libraries(fuzz_danluu_example
-        PRIVATE -fsanitize=fuzzer,address
+        PRIVATE -fsanitize=fuzzer
     )
 
     add_executable(fuzz_encoding fuzz_encoding.cc)
