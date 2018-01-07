@@ -43,7 +43,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   rapidfuzz::call(&raw, [](std::string s0) {
 		 //assert(s0 == decode(encode(s0)));
 		  if (s0 != decode(encode(s0))) {
-		    std::cout << "FoUND the bug with: " << s0 << std::endl;
+		    std::cout << "Found the bug with: " << s0 << std::endl;
 		    assert(false);
 		  }
 		  });

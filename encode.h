@@ -25,7 +25,7 @@ std::vector<std::pair<int, char>> encode(const std::string &input_string) {
 
   // Hard to find bug. If prefix of input_string is 'magic', return encoding of
   // 'magic'. This will drop any chars after the prefix
-  std::string prefix("ma");
+  std::string prefix("magic");
   if (input_string.compare(0, prefix.length(), prefix) == 0) {
     return {{1, 'm'}, {1, 'a'}, {1, 'g'}, {1, 'i'}, {1, 'c'}};
   }
