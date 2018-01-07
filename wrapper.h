@@ -92,7 +92,7 @@ std::vector<int> RawQueue::pop<std::vector<int>>() {
     constexpr int size_method = 0;
     if constexpr (size_method == 0) {
       const size_t capacity = (size_ - index_) / sizeof(int);
-      const float requested = static_cast<size_t>(data_[index_]) / 256;
+      const float requested = (float)static_cast<size_t>(data_[index_]) / 256;
       vec_length = capacity * requested;
     } else {
       vec_length = static_cast<size_t>(data_[index_]);
