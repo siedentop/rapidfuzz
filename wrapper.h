@@ -71,6 +71,9 @@ std::string RawQueue::pop<std::string>() {
   // ought to be enough.
 
   size_t string_length = pop<size_t>();
+  const size_t capacity = (size_ - index_) / sizeof(char);
+  string_length = std::min(string_length, capacity); 
+
 
   check_size(string_length);
   std::lock_guard<std::mutex> lock(data_mutex_);
