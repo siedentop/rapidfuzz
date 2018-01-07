@@ -33,15 +33,12 @@ std::ostream &print(std::ostream &os, const T &t) {
 
 /// Takes an array and returns a non-zero int
 int dut(const std::vector<int> &a) {
-  if (a.size() < 1) {
+  if (a.size() < 4) {
     return 1;
   }
 
-  if (some_filter(a[0])
-     // && some_filter(a[1])
-		 //  && some_filter(a[2])
-                 // && some_filter(a[3])
-      ) {
+  if (some_filter(a[0]) && some_filter(a[1]) && some_filter(a[2]) &&
+      some_filter(a[3])) {
     return 0; // Intentional bug: documentation promises non-zero.
   }
 
@@ -52,30 +49,42 @@ int fud(int x) { return x == 0; }
 
 void easy_test(int x) {
   if (x == -42) {
-	  std::cout << "Found bug: " << x << std::endl;
-	  assert(false);
+    std::cout << "Found bug: " << x << std::endl;
+    assert(false);
   }
 }
 
 void easy_test2(int x, int y) {
-   if (x == -42 && y == 9392939) {
-	   std::cout << "Found bug: " << x << ", " << y << std::endl;
-   assert(false);
-   }
+  if (x == -42 && y == 9392939) {
+    std::cout << "Found bug: " << x << ", " << y << std::endl;
+    assert(false);
+  }
+}
+
+std::ostream &operator<<(std::ostream &os, const std::vector<int> &x) {
+  for (const auto &elem : x) {
+    os << elem << ", ";
+  }
+  return os;
+}
+
+void hard_test(std::vector<int> x) {
+  std::cout << "Len: " << x.size() << ": " << x << std::endl;
+  assert(dut(x) != 0);
 }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-///  rc::check("Fuzz-fud",
-///            [](const std::vector<int> &x) { assert(dut(x) != 0); },
-///            Data,
-///            Size);
-
+  ///  rc::check("Fuzz-fud",
+  ///            [](const std::vector<int> &x) { assert(dut(x) != 0); },
+  ///            Data,
+  ///            Size);
 
   rapidfuzz::RawQueue raw(Data, Size);
   try {
-   // rapidfuzz::call(&raw, [](std::vector<int> x) { assert(dut(x) != 0); });
-    rapidfuzz::call(&raw, easy_test2);
-    
+    // rapidfuzz::call(&raw, [](std::vector<int> x) { assert(dut(x) != 0); });
+    rapidfuzz::call(&raw, hard_test);
+    // rapidfuzz::call(&raw, easy_test2);
+
   } catch (std::runtime_error) {
   }
   return 0;
