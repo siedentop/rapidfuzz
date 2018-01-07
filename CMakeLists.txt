@@ -33,9 +33,22 @@ if(TRUE)
     add_executable(fuzz_danluu_example danluu_example.cc)
     target_compile_options(fuzz_danluu_example PRIVATE -fsanitize=fuzzer)
     target_compile_options(fuzz_danluu_example PRIVATE -std=c++17)
-    target_link_libraries(fuzz_danluu_example
-        PRIVATE -fsanitize=fuzzer
-    )
+    target_link_libraries(fuzz_danluu_example PRIVATE -fsanitize=fuzzer)
+
+    # From LibFuzzer Tutorial... What I do below is wrong..    
+    # # Build you code for Clang Coverage; link it against a standalone driver for running fuzz targets.
+    # clang -fprofile-instr-generate -fcoverage-mapping ~/FTS/tutorial/fuzz_me.cc \
+    #                                                   ~/Fuzzer/standalone/StandaloneFuzzTargetMain.c
+    # mkdir CORPUS # Create an empty corpus dir.
+    # echo -n A > CORPUS/A && ./a.out CORPUS/* && \
+    #              llvm-profdata merge -sparse *.profraw -o default.profdata && \
+    #              llvm-cov show a.out -instr-profile=default.profdata -name=FuzzMe
+    
+    #target_compile_options(fuzz_danluu_example PRIVATE --coverage -g -O0)
+    #target_link_libraries(fuzz_danluu_example
+    #    PRIVATE -fsanitize=fuzzer --coverage
+    #)
+
 
     add_executable(fuzz_encoding fuzz_encoding.cc)
     target_compile_options(fuzz_encoding PRIVATE -fsanitize=fuzzer,address -std=c++17)
