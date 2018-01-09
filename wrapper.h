@@ -5,8 +5,8 @@
 #include <mutex>
 #include <string>
 #include <type_traits>
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "external/callable/callable.hpp"
 
@@ -72,8 +72,7 @@ std::string RawQueue::pop<std::string>() {
 
   size_t string_length = pop<size_t>();
   const size_t capacity = (size_ - index_) / sizeof(char);
-  string_length = std::min(string_length, capacity); 
-
+  string_length = std::min(string_length, capacity);
 
   check_size(string_length);
   std::lock_guard<std::mutex> lock(data_mutex_);
@@ -94,9 +93,9 @@ std::vector<int> RawQueue::pop<std::vector<int>>() {
     check_size(1);
     const size_t capacity = (size_ - index_) / sizeof(int);
     /** Both methods work (on first glance) equally well.
-     * For the second method, where the first byte determines the rest of the length,
-     * it is important to make vec_length = min(vec_length, remaining_capacity). Otherwise
-     * it does not find valid inputs.
+     * For the second method, where the first byte determines the rest of the
+     * length, it is important to make vec_length = min(vec_length,
+     * remaining_capacity). Otherwise it does not find valid inputs.
      */
     constexpr int size_method = 1;
     if constexpr (size_method == 0) {
@@ -131,6 +130,15 @@ decltype(auto) call(RawQueue *Data, F &&f, Args &&... args) {
     typedef typename callable_traits<F>::template argument_type<pos> T;
     auto val = Data->pop<T>();
     return call(Data, std::forward<F>(f), std::forward<Args>(args)..., val);
+  }
+}
+
+template <typename F, typename... Args>
+void check(const uint8_t *Data, size_t Size, F &&f) {
+  RawQueue raw(Data, Size);
+  try {
+    call(&raw, std::forward<F>(f));
+  } catch (std::runtime_error) {
   }
 }
 

@@ -49,12 +49,15 @@ if(TRUE)
     #    PRIVATE -fsanitize=fuzzer --coverage
     #)
 
-
     add_executable(fuzz_encoding fuzz_encoding.cc)
     target_compile_options(fuzz_encoding PRIVATE -fsanitize=fuzzer,address -std=c++17)
     target_link_libraries(fuzz_encoding
         PRIVATE -fsanitize=fuzzer,address
     )
+    
+    add_executable(fuzz_example1 example1.cc)
+    target_compile_options(fuzz_example1 PRIVATE -fsanitize=fuzzer -std=c++17)
+    target_link_libraries(fuzz_example1 PRIVATE -fsanitize=fuzzer)
 endif()
 
 add_library(rapidcheck
